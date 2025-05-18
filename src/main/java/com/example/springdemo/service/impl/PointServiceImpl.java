@@ -97,4 +97,42 @@ public class PointServiceImpl implements PointService {
     public Integer getUserTotalPoints(Integer userId) {
         return pointMapper.getTotalPointsByUserId(userId);
     }
+    
+    @Override
+    @Transactional
+    public boolean initUserPoints(Integer userId) {
+        // 检查用户是否已有积分记录
+        Integer currentPoints = pointMapper.getTotalPointsByUserId(userId);
+        if (currentPoints != null) {
+            // 用户已有积分记录，无需初始化
+            return true;
+        }
+        
+        // 创建初始积分记录（0积分）
+        Point point = new Point();
+        point.setUserId(userId);
+        point.setPointType("reward"); // 初始化为奖励积分类型
+        point.setPoints(0);
+        point.setRecordedAt(LocalDateTime.now());
+        
+        // 插入积分记录
+        boolean result = pointMapper.insert(point) > 0;
+        
+        if (result) {
+            // 记录积分初始化日志
+            pointLogService.logPointChange(
+                userId,
+                point.getPointId(),
+                "init",
+                0,
+                0,
+                0,
+                "用户积分账户初始化",
+                userId, // 操作人为用户自己
+                "system" // 操作人名称为系统
+            );
+        }
+        
+        return result;
+    }
 } 
