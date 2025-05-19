@@ -18,6 +18,13 @@
         </div>
       </template>
       
+      <div class="avatar-container">
+        <AvatarUpload
+          :current-avatar="userStore.userInfo?.avatarUrl"
+          @update:avatar="handleAvatarUpdate"
+        />
+      </div>
+      
       <div class="profile-info" v-if="!isEditing">
         <div class="info-item">
           <span class="label">用户名：</span>
@@ -105,6 +112,7 @@ import { Wallet } from '@element-plus/icons-vue';
 import { useUserStore } from '@/stores/user';
 import { getUserTotalPoints } from '@/api/point';
 import { updateUser } from '@/api/user';
+import AvatarUpload from '@/components/AvatarUpload.vue';
 
 const userStore = useUserStore();
 const totalPoints = ref(0);
@@ -132,6 +140,15 @@ const rules = reactive<FormRules>({
     { min: 6, max: 20, message: '密码长度在 6 到 20 个字符', trigger: 'blur' }
   ]
 });
+
+// 处理头像更新
+const handleAvatarUpdate = (url: string) => {
+  if (userStore.userInfo) {
+    userStore.userInfo.avatarUrl = url;
+    // 可以添加额外的处理逻辑，例如更新导航栏头像等
+    ElMessage.success('头像更新成功');
+  }
+};
 
 // 获取用户总积分
 const fetchTotalPoints = async () => {
@@ -209,6 +226,12 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .profile-info {

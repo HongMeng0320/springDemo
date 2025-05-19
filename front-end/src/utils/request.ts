@@ -45,8 +45,14 @@ request.interceptors.response.use(
       const status = error.response.status;
       
       if (status === 401) {
-        // 检查是否是登录请求
+        // 检查是否是登录或注册请求
         const isLoginRequest = error.config.url.includes('/login');
+        const isRegisterRequest = error.config.url.includes('/register');
+        
+        // 如果是注册请求，直接返回错误，不做额外处理
+        if (isRegisterRequest) {
+          return Promise.reject(error);
+        }
         
         // 如果不是登录请求才显示过期消息
         if (!isLoginRequest && !window.hasShownLoginExpired) {

@@ -12,6 +12,15 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/views/register/RegisterView.vue'),
+    meta: {
+      title: '注册',
+      requiresAuth: false
+    }
+  },
+  {
     path: '/',
     component: () => import('@/layouts/default/index.vue'),
     redirect: '/dashboard',

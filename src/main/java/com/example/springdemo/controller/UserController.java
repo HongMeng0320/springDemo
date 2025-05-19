@@ -1,12 +1,15 @@
 package com.example.springdemo.controller;
 
 import com.example.springdemo.common.Result;
+import com.example.springdemo.pojo.AvatarUpdateDTO;
 import com.example.springdemo.pojo.User;
 import com.example.springdemo.service.PointService;
 import com.example.springdemo.service.TokenService;
+import com.example.springdemo.service.UserLogService;
 import com.example.springdemo.service.UserService;
 import com.example.springdemo.utils.ThreadLocalUtil;
 import com.github.pagehelper.PageInfo;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,14 +28,21 @@ public class UserController {
     
     @Autowired
     private TokenService tokenService;
+    
+    @Autowired
+    private UserLogService userLogService;
 
     /**
      * 用户登录
      */
     @PostMapping("/login")
-    public Result<Map<String, Object>> login(@RequestBody Map<String, String> params) {
+    public Result<Map<String, Object>> login(@RequestBody Map<String, String> params, HttpServletRequest request) {
         String username = params.get("username");
         String password = params.get("password");
+        
+        // 获取客户端信息
+        String ipAddress = getClientIpAddress(request);
+        String deviceInfo = request.getHeader("User-Agent");
         
         System.out.println("接收到登录请求 - 用户名: " + username);
         
@@ -40,6 +50,10 @@ public class UserController {
         User user = userService.login(username, password);
         if (user == null) {
             System.out.println("登录失败 - 用户名或密码错误");
+            
+            // 记录登录失败日志
+            userLogService.logLogin(username, null, false, ipAddress, deviceInfo, "用户名或密码错误");
+            
             return Result.error("用户名或密码错误");
         }
         
@@ -51,6 +65,9 @@ public class UserController {
         // 生成新的JWT令牌
         String token = tokenService.generateToken(user.getUserId(), user.getUsername());
         System.out.println("生成新的JWT令牌: " + token.substring(0, 20) + "...");
+        
+        // 记录登录成功日志
+        userLogService.logLogin(username, user.getUserId(), true, ipAddress, deviceInfo, "登录成功");
         
         // 返回结果
         Map<String, Object> result = new HashMap<>();
@@ -227,15 +244,70 @@ public class UserController {
      * 用户退出登录
      */
     @PostMapping("/logout")
-    public Result<Void> logout(@RequestHeader("Authorization") String authHeader) {
-        // 提取令牌
-        String token = authHeader;
-        if (token.startsWith("Bearer ")) {
+    public Result<Void> logout(HttpServletRequest request) {
+        // 获取当前用户信息
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        Integer userId = (Integer) claims.get("userId");
+        String username = (String) claims.get("username");
+        
+        // 获取客户端信息
+        String ipAddress = getClientIpAddress(request);
+        String deviceInfo = request.getHeader("User-Agent");
+        
+        // 获取token
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7);
         }
         
-        // 使令牌失效
-        tokenService.invalidateToken(token);
+        // 使token失效
+        if (token != null) {
+            tokenService.invalidateToken(token);
+        }
+        
+        // 记录登出日志
+        userLogService.logLogout(username, userId, ipAddress, deviceInfo, "用户主动登出");
+        
+        return Result.success();
+    }
+    
+    /**
+     * 获取客户端真实IP地址
+     */
+    private String getClientIpAddress(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_CLIENT_IP");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
+    }
+
+    /**
+     * 更新用户头像
+     */
+    @PutMapping("/user/avatar")
+    public Result<Void> updateAvatar(@RequestBody AvatarUpdateDTO avatarUpdateDTO) {
+        // 获取当前用户ID
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        Integer userId = (Integer) claims.get("userId");
+        
+        // 更新头像
+        boolean success = userService.updateAvatar(userId, avatarUpdateDTO.getAvatarUrl());
+        if (!success) {
+            return Result.error("头像更新失败");
+        }
         
         return Result.success();
     }

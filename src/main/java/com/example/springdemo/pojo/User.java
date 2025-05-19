@@ -13,6 +13,7 @@ public class User {
     private String phone;      // 电话
     private String role;       // 角色（admin/user）
     private Integer status;    // 状态（1-启用/0-禁用）
+    private String avatarUrl;  // 头像URL
     private LocalDateTime createdAt;  // 创建时间
     private LocalDateTime updatedAt;  // 更新时间
 } 

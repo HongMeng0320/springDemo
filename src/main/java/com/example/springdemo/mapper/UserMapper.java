@@ -71,6 +71,7 @@ public interface UserMapper {
             "<if test='password != null'>password = #{password},</if>" +
             "<if test='role != null'>role = #{role},</if>" +
             "<if test='status != null'>status = #{status},</if>" +
+            "<if test='avatarUrl != null'>avatar_url = #{avatarUrl},</if>" +
             "updated_at = #{updatedAt}" +
             "</set>" +
             "WHERE user_id = #{userId}" +
@@ -87,9 +88,15 @@ public interface UserMapper {
     @Update("UPDATE users SET status = #{status}, updated_at = #{updatedAt} WHERE user_id = #{userId}")
     int updateStatus(@Param("userId") Integer userId, @Param("status") Integer status, @Param("updatedAt") LocalDateTime updatedAt);
 
-    // 更新头像
-    @Update("UPDATE user SET user_pic = #{avatarUrl} , update_time =now() WHERE id = #{id}")
-    void updateAvatar(String avatarUrl, Integer id);
+    /**
+     * 更新用户头像
+     * @param userId 用户ID
+     * @param avatarUrl 头像URL
+     * @param updatedAt 更新时间
+     * @return 影响行数
+     */
+    @Update("UPDATE users SET avatar_url = #{avatarUrl}, updated_at = #{updatedAt} WHERE user_id = #{userId}")
+    int updateAvatar(@Param("userId") Integer userId, @Param("avatarUrl") String avatarUrl, @Param("updatedAt") LocalDateTime updatedAt);
 
     // 更新密码
     @Update("UPDATE user SET password = #{md5String}, update_time =now() WHERE id = #{id}")

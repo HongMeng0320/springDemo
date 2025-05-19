@@ -47,4 +47,11 @@ public interface PointService {
      * @return 总积分
      */
     Integer getUserTotalPoints(Integer userId);
+    
+    /**
+     * 初始化用户积分账户
+     * @param userId 用户ID
+     * @return 是否成功
+     */
+    boolean initUserPoints(Integer userId);
 } 

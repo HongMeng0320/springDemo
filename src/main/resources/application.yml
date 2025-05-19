@@ -25,14 +25,14 @@ spring:
       # 如果需要密码，取消下面注释
       # password: your_password
 
-# 阿里云OSS配置 - 已禁用
+# 阿里云OSS配置
 aliyun:
   oss:
-    enabled: false  # 禁用阿里云OSS
-    endpoint:
-    access-key-id:
-    access-key-secret:
-    bucket-name:
+    enabled: true
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    access-key-id: LTAI5tActT6ygArPMnPfg7mb
+    access-key-secret: vwsUX0lSLaZtaiGYzriaxVZ9UjxEl7
+    bucket-name: hongmeng0320
 
 # MyBatis配置
 mybatis:

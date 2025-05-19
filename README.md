@@ -13,6 +13,7 @@
 - **Redis**: 用于存储JWT令牌和黑名单
 - **MySQL**: 关系型数据库，存储业务数据
 - **Lombok**: 简化Java代码，自动生成getter/setter等方法
+- **阿里云OSS**: 对象存储服务，用于存储用户头像
 - **Maven**: 项目构建和依赖管理工具
 
 ### 前端技术栈
@@ -30,6 +31,7 @@
 - 用户信息管理
 - 用户角色控制（管理员/普通用户）
 - 用户状态管理（启用/禁用）
+- 用户头像上传与管理
 
 ### 2. 积分管理
 - 积分记录
@@ -43,6 +45,11 @@
 - 密码加密存储
 - Token自动续期
 - Token黑名单机制
+
+### 4. 文件管理
+- 基于阿里云OSS的文件存储
+- 用户头像上传与预览
+- 安全的文件上传策略
 
 ## 技术实现细节
 
@@ -65,7 +72,7 @@ sequenceDiagram
 ```
 
 ### 2. 数据库设计
-- **users表**: 存储用户信息
+- **users表**: 存储用户信息，包含头像URL字段
 - **points表**: 存储积分记录
 - **point_logs表**: 存储积分变动日志
 
@@ -79,6 +86,21 @@ sequenceDiagram
 - 分页查询优化
 - 数据库索引优化
 
+### 5. 头像上传流程
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+    participant AliOSS
+    
+    Client->>Server: 请求OSS上传策略
+    Server->>Client: 返回临时授权策略
+    Client->>AliOSS: 直接上传文件
+    AliOSS->>Client: 上传成功
+    Client->>Server: 更新用户头像URL
+    Server->>Client: 更新成功
+```
+
 ## 项目结构
 ```
 springDemo/
@@ -87,11 +109,16 @@ springDemo/
 │   │   ├── java/
 │   │   │   └── com/example/springdemo/
 │   │   │       ├── config/        # 配置类
+│   │   │       │   └── OssConfig.java  # OSS配置
 │   │   │       ├── controller/    # 控制器
+│   │   │       │   └── OssController.java  # OSS控制器
 │   │   │       ├── mapper/        # MyBatis接口
 │   │   │       ├── pojo/          # 实体类
+│   │   │       │   └── OssPolicy.java  # OSS策略类
 │   │   │       ├── service/       # 服务层
+│   │   │       │   └── OssService.java  # OSS服务
 │   │   │       └── utils/         # 工具类
+│   │   │           └── AliOssUtil.java  # OSS工具类
 │   │   └── resources/
 │   │       ├── mapper/            # MyBatis映射文件
 │   │       └── application.yml    # 配置文件
@@ -99,9 +126,14 @@ springDemo/
 └── front-end/                     # 前端项目
     ├── src/
     │   ├── api/                   # API请求
+    │   │   └── oss.ts             # OSS相关API
     │   ├── components/            # 组件
+    │   │   ├── AvatarUpload.vue   # 头像上传组件
+    │   │   └── UserAvatar.vue     # 用户头像显示组件
     │   ├── router/                # 路由配置
     │   ├── stores/                # 状态管理
+    │   ├── utils/                 # 工具函数
+    │   │   └── oss.ts             # OSS工具函数
     │   └── views/                 # 页面
     └── package.json               # 依赖配置
 ```
@@ -111,6 +143,7 @@ springDemo/
    - 配置数据库连接
    - 配置Redis连接
    - 配置JWT密钥
+   - 配置阿里云OSS（endpoint、accessKey、bucket等）
    - 打包并运行Spring Boot应用
 
 2. 前端部署
@@ -123,12 +156,15 @@ springDemo/
 - Node.js 16+
 - MySQL 8.0+
 - Redis 6.0+
+- 阿里云OSS账号及配置
 
 ## 注意事项
 1. 生产环境部署时请修改默认密码
 2. 定期备份数据库
 3. 注意JWT密钥的保密性
 4. 合理设置Redis过期时间
+5. 阿里云OSS需要正确配置CORS规则，允许前端域名跨域访问
+6. 生产环境中请使用HTTPS确保文件上传的安全性
 
 ## 贡献指南
 1. Fork 项目

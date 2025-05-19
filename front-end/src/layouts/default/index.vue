@@ -55,7 +55,12 @@
           <el-dropdown trigger="click">
             <div class="avatar-container">
               <span class="username">{{ userStore.userInfo?.username }}</span>
-              <el-avatar size="small" :icon="User" />
+              <el-avatar 
+                size="small" 
+                :src="userStore.userInfo?.avatarUrl" 
+                :icon="userStore.userInfo?.avatarUrl ? undefined : User"
+                @error="() => avatarLoadError = true"
+              />
             </div>
             <template #dropdown>
               <el-dropdown-menu>
@@ -97,6 +102,7 @@ import { ElMessageBox } from 'element-plus';
 const route = useRoute();
 const userStore = useUserStore();
 const isCollapse = ref(false);
+const avatarLoadError = ref(false);
 
 // 当前活动菜单
 const activeMenu = computed(() => {

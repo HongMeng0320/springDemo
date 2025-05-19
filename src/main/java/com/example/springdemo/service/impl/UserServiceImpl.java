@@ -148,4 +148,10 @@ public class UserServiceImpl implements UserService {
     public boolean updateStatus(Integer userId, Integer status) {
         return userMapper.updateStatus(userId, status, LocalDateTime.now()) > 0;
     }
+    
+    @Override
+    public boolean updateAvatar(Integer userId, String avatarUrl) {
+        // 更新头像
+        return userMapper.updateAvatar(userId, avatarUrl, LocalDateTime.now()) > 0;
+    }
 }

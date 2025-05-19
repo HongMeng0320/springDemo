@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(20) COMMENT '手机号码',
     role VARCHAR(20) NOT NULL DEFAULT 'user' COMMENT '用户角色：admin-超级管理员，user-普通用户',
     status INT NOT NULL DEFAULT 1 COMMENT '用户状态：1-启用，0-禁用',
+    avatar_url VARCHAR(255) COMMENT '用户头像URL',
     created_at DATETIME NOT NULL COMMENT '创建时间',
     updated_at DATETIME NOT NULL COMMENT '更新时间'
 ) COMMENT '用户信息表';
@@ -37,6 +38,20 @@ CREATE TABLE IF NOT EXISTS point_logs (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON UPDATE CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (point_id) REFERENCES points(point_id) ON UPDATE CASCADE ON DELETE RESTRICT
 ) COMMENT '积分变动日志表';
+
+-- 创建用户日志表
+CREATE TABLE IF NOT EXISTS users_log (
+    log_id INT PRIMARY KEY AUTO_INCREMENT COMMENT '日志ID，主键，自增',
+    user_id INT COMMENT '用户ID，关联users表的user_id，注册时可能为空',
+    username VARCHAR(50) NOT NULL COMMENT '用户名',
+    operation_type VARCHAR(20) NOT NULL COMMENT '操作类型：register-注册，login-登录，logout-登出',
+    operation_time DATETIME NOT NULL COMMENT '操作时间',
+    operation_result TINYINT NOT NULL COMMENT '操作结果：1-成功，0-失败',
+    ip_address VARCHAR(50) COMMENT 'IP地址',
+    device_info VARCHAR(200) COMMENT '设备信息',
+    remark VARCHAR(200) COMMENT '备注信息',
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON UPDATE CASCADE ON DELETE SET NULL
+) COMMENT '用户操作日志表';
 
 -- 初始化超级管理员账户
 -- 用户名：admin
