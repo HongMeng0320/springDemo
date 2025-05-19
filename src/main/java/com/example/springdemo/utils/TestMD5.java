@@ -10,6 +10,7 @@ public class TestMD5 {
     
     /**
      * 计算字符串的MD5值
+     * aa
      */
     public static String md5(String input) {
         try {

@@ -32,7 +32,7 @@ public class JwtUtil {
     /**
      * 解析JWT token
      * @param token JWT token
-     * @return 存储在token中的信息
+     * @return 存储在token中的信息a
      */
     @SuppressWarnings("unchecked")
     public Map<String, Object> parseToken(String token) {
