@@ -75,4 +75,12 @@ public interface UserService {
      * @return 用户列表
      */
     List<User> findAll();
+    
+    /**
+     * 更新用户头像
+     * @param userId 用户ID
+     * @param avatarUrl 头像URL
+     * @return 更新成功返回true，失败返回false
+     */
+    boolean updateAvatar(Integer userId, String avatarUrl);
 } 

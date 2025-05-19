@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(20) COMMENT '手机号码',
     role VARCHAR(20) NOT NULL DEFAULT 'user' COMMENT '用户角色：admin-超级管理员，user-普通用户',
     status INT NOT NULL DEFAULT 1 COMMENT '用户状态：1-启用，0-禁用',
+    avatar_url VARCHAR(255) COMMENT '用户头像URL',
     created_at DATETIME NOT NULL COMMENT '创建时间',
     updated_at DATETIME NOT NULL COMMENT '更新时间'
 ) COMMENT '用户信息表';

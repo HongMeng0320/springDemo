@@ -60,4 +60,11 @@ export function deleteUser(userId: number): Promise<void> {
  */
 export function addUser(data: Partial<User>): Promise<void> {
   return post<void>('/api/admin/users', data);
+}
+
+/**
+ * 更新用户头像
+ */
+export function updateUserAvatar(avatarUrl: string): Promise<void> {
+  return put<void>('/api/user/avatar', { avatarUrl });
 } 

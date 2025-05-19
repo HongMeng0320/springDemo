@@ -1,6 +1,7 @@
 package com.example.springdemo.controller;
 
 import com.example.springdemo.common.Result;
+import com.example.springdemo.pojo.AvatarUpdateDTO;
 import com.example.springdemo.pojo.User;
 import com.example.springdemo.service.PointService;
 import com.example.springdemo.service.TokenService;
@@ -291,5 +292,23 @@ public class UserController {
             ip = request.getRemoteAddr();
         }
         return ip;
+    }
+
+    /**
+     * 更新用户头像
+     */
+    @PutMapping("/user/avatar")
+    public Result<Void> updateAvatar(@RequestBody AvatarUpdateDTO avatarUpdateDTO) {
+        // 获取当前用户ID
+        Map<String, Object> claims = ThreadLocalUtil.get();
+        Integer userId = (Integer) claims.get("userId");
+        
+        // 更新头像
+        boolean success = userService.updateAvatar(userId, avatarUpdateDTO.getAvatarUrl());
+        if (!success) {
+            return Result.error("头像更新失败");
+        }
+        
+        return Result.success();
     }
 }
