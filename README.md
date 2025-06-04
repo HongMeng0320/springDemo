@@ -2,6 +2,14 @@
 
 ## 项目概述
 这是一个基于 Spring Boot 和 Vue.js 的积分管理系统，实现了用户管理、积分管理、积分日志等功能。系统采用前后端分离架构，使用 JWT 进行身份认证和授权。
+## 项目展示
+![image](https://github.com/user-attachments/assets/11aa28ca-7f9e-4f01-8a3e-938728a6ee25)
+![image](https://github.com/user-attachments/assets/e9afb1bd-6217-4317-b030-8f966fe4ab29)
+![image](https://github.com/user-attachments/assets/6d5d77d4-228c-481f-b374-38d6f7aa69bc)
+![image](https://github.com/user-attachments/assets/7a0ddee5-46bb-465a-9928-d3eca311bd46)
+![image](https://github.com/user-attachments/assets/be69c714-226e-4daf-a121-33fb82d2f638)
+![image](https://github.com/user-attachments/assets/021d27d3-7819-418b-a4c9-c0784063cd2c)
+![image](https://github.com/user-attachments/assets/0c621566-5ec2-4c03-8624-9dfd5f8d2c51)
 
 ## 技术栈
 
