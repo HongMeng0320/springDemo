@@ -4,7 +4,7 @@
     <el-card class="welcome-card">
       <template #header>
         <div class="card-header">
-          <span>欢迎使用系统管理平台</span>
+          <span>欢迎使用知识积分管理系统</span>
         </div>
       </template>
       <div class="welcome-content">

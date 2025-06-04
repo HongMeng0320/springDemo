@@ -1,7 +1,11 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <div class="login-title">系统登录</div>
+      <div class="system-logo">
+        <img src="@/assets/logo.svg" alt="系统Logo" class="logo-image" />
+      </div>
+      <div class="login-title">知识积分管理系统</div>
+      <div class="login-subtitle">欢迎使用知识积分管理平台</div>
       <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-form">
         <el-form-item prop="username">
           <el-input v-model="loginForm.username" placeholder="用户名" prefix-icon="User" />
@@ -30,6 +34,9 @@
           还没有账号？<router-link to="/register">立即注册</router-link>
         </div>
       </el-form>
+      <div class="login-footer">
+        © 知识积分管理系统 - rj22-3第三小组
+      </div>
     </div>
   </div>
 </template>
@@ -37,7 +44,7 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted, onBeforeMount } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
-import { User, Lock } from '@element-plus/icons-vue';
+
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
 
@@ -114,22 +121,50 @@ const handleLogin = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  background-color: #f5f7fa;
+  height: 100vh;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  background-size: cover;
+  position: relative;
 }
 
 .login-box {
-  width: 400px;
-  padding: 30px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  width: 420px;
+  padding: 40px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.8s ease-in-out;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.system-logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
 }
 
 .login-title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
-  color: #409eff;
+  color: #333;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.login-subtitle {
+  font-size: 16px;
+  color: #666;
   text-align: center;
   margin-bottom: 30px;
 }
@@ -138,13 +173,63 @@ const handleLogin = async () => {
   margin-top: 20px;
 }
 
+.login-form :deep(.el-input__wrapper) {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 0 15px;
+}
+
+.login-form :deep(.el-input__inner) {
+  height: 45px;
+}
+
 .login-button {
   width: 100%;
+  height: 45px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  background: linear-gradient(90deg, #2575fc 0%, #6a11cb 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
 }
 
 .register-link {
   text-align: center;
-  margin-top: 15px;
+  margin-top: 20px;
   font-size: 14px;
+  color: #666;
+}
+
+.register-link a {
+  color: #2575fc;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.register-link a:hover {
+  color: #6a11cb;
+  text-decoration: underline;
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 12px;
+  color: #999;
+}
+
+@media (max-width: 768px) {
+  .login-box {
+    width: 90%;
+    padding: 30px;
+  }
 }
 </style> 

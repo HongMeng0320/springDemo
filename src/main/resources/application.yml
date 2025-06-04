@@ -30,8 +30,8 @@ aliyun:
   oss:
     enabled: true
     endpoint: oss-cn-hangzhou.aliyuncs.com
-    access-key-id: LTAI5tActT6ygArPMnPfg7mb
-    access-key-secret: vwsUX0lSLaZtaiGYzriaxVZ9UjxEl7
+    access-key-id: ${ALIYUN_ACCESS_KEY_ID}
+    access-key-secret: ${ALIYUN_ACCESS_KEY_SECRET}
     bucket-name: hongmeng0320
 
 # MyBatis配置

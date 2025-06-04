@@ -96,7 +96,7 @@ const router = createRouter({
 // 全局前置守卫
 router.beforeEach((to, from, next) => {
   // 设置页面标题
-  document.title = to.meta.title ? `${to.meta.title} - 系统管理` : '系统管理';
+  document.title = to.meta.title ? `${to.meta.title} - 知识积分管理系统` : '知识积分管理系统';
   
   console.log('路由跳转:', from.path, '->', to.path);
   

@@ -3,7 +3,7 @@
     <!-- 侧边栏 -->
     <div class="sidebar">
       <div class="logo">
-        <span>系统管理</span>
+        <span>知识积分管理系统</span>
       </div>
       <el-menu
         :default-active="activeMenu"

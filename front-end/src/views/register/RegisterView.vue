@@ -1,8 +1,12 @@
 <template>
   <div class="register-container">
-    <el-card class="register-card">
+    <div class="register-box">
+      <div class="system-logo">
+        <img src="@/assets/logo.svg" alt="系统Logo" class="logo-image" />
+      </div>
       <div class="register-header">
-        <h2>用户注册</h2>
+        <h2>知识积分管理系统</h2>
+        <div class="register-subtitle">用户注册</div>
       </div>
       <el-form
         ref="registerFormRef"
@@ -37,14 +41,17 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm" :loading="loading">注册</el-button>
-          <el-button @click="resetForm">重置</el-button>
+          <el-button type="primary" @click="submitForm" :loading="loading" class="register-button">注册</el-button>
+          <el-button @click="resetForm" class="reset-button">重置</el-button>
         </el-form-item>
         <div class="login-link">
           已有账号？<router-link to="/login">立即登录</router-link>
         </div>
       </el-form>
-    </el-card>
+      <div class="register-footer">
+        © 2023 知识积分管理系统 - 版权所有
+      </div>
+    </div>
   </div>
 </template>
 
@@ -163,14 +170,35 @@ const resetForm = () => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  background-size: cover;
+  position: relative;
 }
 
-.register-card {
-  width: 500px;
+.register-box {
+  width: 550px;
   max-width: 100%;
-  padding: 20px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.system-logo {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.logo-image {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
 }
 
 .register-header {
@@ -178,15 +206,78 @@ const resetForm = () => {
   margin-bottom: 30px;
 }
 
+.register-header h2 {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.register-subtitle {
+  font-size: 16px;
+  color: #666;
+}
+
+.register-button {
+  width: 48%;
+  height: 45px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  background: linear-gradient(90deg, #2575fc 0%, #6a11cb 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.reset-button {
+  width: 48%;
+  height: 45px;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-left: 4%;
+}
+
+.register-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+}
+
 .login-link {
   text-align: center;
-  margin-top: 15px;
+  margin-top: 20px;
   font-size: 14px;
+  color: #666;
+}
+
+.login-link a {
+  color: #2575fc;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.login-link a:hover {
+  color: #6a11cb;
+  text-decoration: underline;
+}
+
+.register-footer {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 12px;
+  color: #999;
 }
 
 @media (max-width: 768px) {
-  .register-card {
+  .register-box {
     width: 90%;
+    padding: 30px;
+  }
+  
+  .register-button, .reset-button {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 10px;
   }
 }
 </style> 
